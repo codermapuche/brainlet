@@ -1,2 +1,221 @@
-# brainlet
-Lightweight neural net library in vanilla JS, zero deps, fully hackable.
+# 🧠 Brainlet – The 200-line Neural Network That Gets the Job Done
+
+**Brainlet** is your tiny neural network library for JavaScript.  
+Hackable. Serializable. Embeddable. Under **200 lines** of vanilla code.
+
+You don’t need Python, GPUs, or cloud infrastructure. Just pop in `brainlet.js` and start learning like it’s 1999—only better.
+
+Use it to embed brains into your apps, detect patterns in texts, build classifiers, or impress your AI friends with something that *just works*.
+
+---
+
+## 🚀 Why Brainlet?
+
+- ⚡ **Fast & lightweight**: Pure JS, no dependencies, <200 LOC
+- 📦 **Embeddable**: Neural networks can be serialized to plain JSON
+- 🧠 **Simple**: Great for education, prototyping, or tiny models
+- 🔁 **Train in-place** or load pre-trained brains
+- 🪄 **No black box**: Every line of math is yours to bend, twist, or fork
+
+---
+
+## 📦 Example Included: Language Detection
+
+In `examples/lang_detector`, you'll find a real-world demo that detects the language of any sentence using n-gram frequency patterns.
+
+It comes with a pre-trained brain (`brain.json`). If this file is missing, the script **trains a new neural net on the fly** using the `dataset/` folder.
+
+### 🧪 How to run the example:
+
+```bash
+cd examples/lang_detector
+node main.js
+```
+
+### Example output:
+
+```
+✅ "signora presidente , vorrei sa" italian
+✅ "is there a member who wishes t" english
+✅ "c ' est en effet tout à fait d" french
+.
+.
+.
+✅ "le interrogazioni cui è stata " italian
+✅ "le groupe ppe ­ de demande de " french
+✅ "madam president , can you tell" english
+
+🚀 Precisión: 100.00%
+```
+
+---
+
+## 🧬 How It Works
+
+Brainlet works like any multilayer perceptron (MLP):  
+It builds a network of layers, trains via backpropagation, and feeds forward using sigmoid activations.  
+You define your vocabulary, convert inputs into tensors, and train against one-hot encoded targets.
+
+> *No TensorFlow. No magic. Just good ol’ neurons, weights, and math.*
+
+---
+
+## 🧰 API Reference
+
+### `forward(input, brain)`
+
+Runs a forward pass through the brain and returns the activations of each layer.
+
+```js
+const output = brainlet.forward(tensor, brain).at(-1);
+```
+
+---
+
+### `trainer(generator, brain, options)`
+
+Trains the brain using an async generator of `{ input, target }` objects.
+
+```js
+await brainlet.trainer(yourGenerator, brain, {
+  minLR: 0.01,
+  maxLR: 0.1,
+  lrPeriod: 10000,
+  minError: 0.001
+});
+```
+
+Uses cosine learning rate scheduling and early stopping.
+
+---
+
+### `weights(rows, cols)`
+
+Returns a 2D array of random weights.
+
+```js
+const w = brainlet.weights(16, 128); // 16 neurons, each with 128 inputs
+```
+
+---
+
+### `biases(size)`
+
+Returns an array of random biases.
+
+```js
+const b = brainlet.biases(16); // biases for 16 neurons
+```
+
+---
+
+### `onehot(label, allLabels)`
+
+Encodes a string label into a one-hot vector.
+
+```js
+brainlet.onehot("english", [ "english", "spanish", "french" ]);
+// → [1, 0, 0]
+```
+
+---
+
+### `ngrams(text, n)`
+
+Returns a map of n-gram frequencies for a given string.
+
+```js
+const map = brainlet.ngrams("hello", 3);
+// → Map { "hel": 1, "ell": 1, "llo": 1 }
+```
+
+---
+
+### `vocab(dataset, n)`
+
+Generates a sorted list of all unique n-grams in a dataset.
+
+```js
+const vocab = brainlet.vocab([{ input: "hello world" }], 3);
+```
+
+---
+
+### `tensor(input, vocab)`
+
+Converts an input string into a normalized frequency vector.
+
+```js
+const vector = brainlet.tensor("bonjour", vocab);
+```
+
+---
+
+## 🔧 How to Use in Your Project
+
+1. Copy `brainlet.js` into your project.
+2. Require it:
+
+```js
+const brainlet = require("./brainlet");
+```
+
+3. Build your brain:
+
+```js
+const vocab = brainlet.vocab(yourDataset, 3),
+      brain = {
+  vocab: vocab,
+  layers: [
+    { size: vocab.length }, // Input layer
+    {
+      size: 16, // Hidden layer
+      weights: brainlet.weights(16, vocab.length),
+      biases : brainlet.biases(16)
+    },
+    {
+      size: tags.length, // Output layer
+      weights: brainlet.weights(tags.length, 16),
+      biases : brainlet.biases(tags.length)
+    }
+  ]
+};
+```
+
+4. Train it with `brainlet.trainer(...)`, or load one from `JSON.parse(...)`.
+
+5. Predict:
+
+```js
+const input  = brainlet.tensor("ciao amico", brain.vocab);
+const output = brainlet.forward(input, brain).at(-1);
+```
+
+---
+
+## ❤️ Made for Curious Hackers
+
+Brainlet was crafted for those who want to **understand** how neural networks work under the hood—no corporate wrappers, no mysterious layers. Just neurons, vectors, and curiosity.
+
+> 🧪 Want to push it further? Fork it, mutate it, teach it to dance.
+
+---
+
+## 📁 Folder Structure
+
+```
+brainlet.js               <- The library (vanilla JS, no deps)
+examples/lang_detector/  <- Real-time language classification demo
+ ├── brain.json           <- Pretrained brain (autogenerated if missing)
+ ├── dataset/             <- Training data (text files, one per language)
+ ├── tests                <- Sentences to classify
+ ├── solutions            <- Expected results
+ └── main.js              <- Full working demo
+```
+
+---
+
+## 🧠 Let's Brainlet
+
+> Embeddable intelligence for the minimalist dev.
+> 100% neuron. 0% bloat.
